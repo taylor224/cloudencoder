@@ -132,6 +132,7 @@ export default {
         { value: '', text: 'Select a Storage Option', disabled: true },
         { value: 's3', text: 'S3' },
         { value: 'ftp', text: 'FTP' },
+        { value: 'local', text: 'Local' },
       ],
       hide: true,
       dismissSecs: 5,
