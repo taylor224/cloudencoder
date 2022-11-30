@@ -27,7 +27,7 @@ type settingsUpdateRequest struct {
 	
 	LocalPath string `json:"LOCAL_PATH"`
 
-	DigitalOceanEnabled     string `json:"DIGITAL_OCEAN_ENABLED" binding:"eq=enabled|eq=disabled"`
+	DigitalOceanEnabled     string `json:"DIGITAL_OCEAN_ENABLED"`
 	DigitalOceanAccessToken string `json:"DIGITAL_OCEAN_ACCESS_TOKEN"`
 	DigitalOceanRegion      string `json:"DIGITAL_OCEAN_REGION"`
 	DigitalOceanVPC         string `json:"DIGITAL_OCEAN_VPC"`
