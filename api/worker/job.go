@@ -184,6 +184,7 @@ func sendAlert(job types.Job) error {
 
 func runEncodeJob(job types.Job) {
 	// Set local src path.
+	log.Info(config.Get().WorkDirectory)
 	job.LocalSource = helpers.CreateLocalSourcePath(
 		config.Get().WorkDirectory, job.Source, job.GUID)
 
