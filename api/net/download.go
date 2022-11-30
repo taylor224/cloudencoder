@@ -3,7 +3,6 @@ package net
 import (
 	"errors"
 	"os"
-	"file"
 	"net/http"
 	"net/url"
 
@@ -118,8 +117,8 @@ func localDownload(job types.Job) error {
 	defer resp.Body.Close()
 	
 	if err != nil {
-		log.Printf("download failed! deleting file: %s", file.Name())
-		os.Remove(file.Name())
+		log.Printf("download failed! deleting file: %s", job.LocalSource)
+		os.Remove(job.LocalSource)
 		panic(err)
 	}
 
