@@ -1,8 +1,8 @@
 package net
 
 import (
-	"errors",
-	"net/url",
+	"errors"
+	"net/url"
 
 	"github.com/alfg/openencoder/api/data"
 	"github.com/alfg/openencoder/api/types"
