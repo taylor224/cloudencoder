@@ -17,7 +17,7 @@ import (
 type request struct {
 	Preset      string `json:"preset" binding:"required"`
 	Source      string `json:"source" binding:"required"`
-	Destination string `json:"dest" binding:"required"`
+	Destination string `json:"dest"`
 }
 
 type updateRequest struct {
