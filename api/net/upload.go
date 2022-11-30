@@ -137,11 +137,11 @@ func localUpload(job types.Job) error {
 	uid, _ := strconv.Atoi(group.Uid)
 	gid, _ := strconv.Atoi(group.Gid)
 	outputDirectory := configPath+"/"+job.GUID
+	os.MkdirAll(outputDirectory, 0774)
 	os.Chown(outputDirectory, uid, gid)
 	
 	for _, file := range filelist {
 		outputFilePath := configPath+"/"+job.GUID+"/"+p.Output
-		os.MkdirAll(outputDirectory, 0774)
 		MoveFile(file, outputFilePath)
 		os.Chown(outputFilePath, uid, gid)
 	}
