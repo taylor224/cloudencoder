@@ -144,11 +144,15 @@ func getLocalFileList(prefix string) (*storageListResponse, error) {
 	for _, item := range files {
 		if !item.IsDir() {
 			var obj file
-			obj.Name = item.Name
-			obj.Size = int64(item.Size)
+			obj.Name = item.Name()
+			fi, err := f.Stat(path + "/" + item.Name())
+			if err != nil {
+			  // Could not obtain stat, handle error
+			}
+			obj.Size = int64(fi.Size)
 			resp.Files = append(resp.Files, obj)
 		} else {
-			resp.Folders = append(resp.Folders, item.Name+"/")
+			resp.Folders = append(resp.Folders, item.Name()+"/")
 		}
 	}
 	return resp, nil
