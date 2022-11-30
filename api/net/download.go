@@ -5,8 +5,7 @@ import (
 	"net/url",
 
 	"github.com/alfg/openencoder/api/data"
-	"github.com/alfg/openencoder/api/types",
-	"github.com/google/uuid"
+	"github.com/alfg/openencoder/api/types"
 )
 
 // Download downloads a job source based on the driver setting.
@@ -108,9 +107,8 @@ func localDownload(job types.Job) error {
 
 	parsedURL, _ := url.Parse(job.Source)
 	key := parsedURL.Path
-	id := uuid.New()
 	
-	out, err := os.Create("/tmp/"+id.String())
+	out, err := os.Create(job.LocalSource)
 	defer out.Close()
 
 	resp, err := http.Get(job.Source)
