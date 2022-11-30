@@ -2,11 +2,11 @@ package net
 
 import (
 	"errors"
-	"fmt",
-	"io",
-	"os",
-	"strings",
-	"strconv",
+	"fmt"
+	"io"
+	"os"
+	"strings"
+	"strconv"
 
 	"github.com/alfg/openencoder/api/data"
 	"github.com/alfg/openencoder/api/types"
