@@ -3,6 +3,7 @@ package net
 import (
 	"errors"
 	"os"
+	"io"
 	"net/http"
 	"net/url"
 
@@ -106,9 +107,6 @@ func ftpDownload(job types.Job) error {
 
 // LocalDownload sets the Local download function.
 func localDownload(job types.Job) error {
-
-	parsedURL, _ := url.Parse(job.Source)
-
 	out, err := os.Create(job.LocalSource)
 	defer out.Close()
 
