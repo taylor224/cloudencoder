@@ -146,7 +146,7 @@ func cleanup(job types.Job) error {
 	log.Info("running cleanup task")
 
 	//tmpPath := helpers.GetTmpPath(config.Get().WorkDirectory, job.GUID)
-	//err := os.RemoveAll(tmpPath)
+	//err := os.RemoveAll(tmpPath+"/"+job.GUID)
 	//if err != nil {
 	//	return err
 	//}
