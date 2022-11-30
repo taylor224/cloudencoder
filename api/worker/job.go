@@ -93,18 +93,21 @@ func encode(job types.Job, probeData *encoder.FFProbeResponse) error {
 	if err != nil {
 		return err
 	}
-	dest := path.Dir(job.LocalSource) + "/dst/" + p.Output
+	slices := strings.Split(job.Source, "/")
+	ext := slices[len(slices)-1]
+	destFileName := job.GUID + "." + ext
+	dest := path.Dir(job.LocalSource) + "/dst/" + destFileName
 
 	// Get job data.
 	j, _ := db.Jobs.GetJobByGUID(job.GUID)
 
 	// Update encode options in DB.
-	db.Jobs.UpdateEncodeOptionsByID(j.EncodeID, p.Data)
+	db.Jobs.UpdateEncodeOptionsByID(j.EncodeID, destFileName)
 
 	// Run FFmpeg.
 	f := &encoder.FFmpeg{}
 	go trackEncodeProgress(j.GUID, j.EncodeID, probeData, f)
-	err = f.Run(job.Source, dest, p.Data)
+	err = f.Run(job.LocalSource, dest, destFileName)
 	if err != nil {
 		close(progressCh)
 		return err
