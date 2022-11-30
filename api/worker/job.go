@@ -103,12 +103,12 @@ func encode(job types.Job, probeData *encoder.FFProbeResponse) error {
 	j, _ := db.Jobs.GetJobByGUID(job.GUID)
 
 	// Update encode options in DB.
-	db.Jobs.UpdateEncodeOptionsByID(j.EncodeID, destFileName)
+	db.Jobs.UpdateEncodeOptionsByID(j.EncodeID, p.Data)
 
 	// Run FFmpeg.
 	f := &encoder.FFmpeg{}
 	go trackEncodeProgress(j.GUID, j.EncodeID, probeData, f)
-	err = f.Run(job.LocalSource, dest, destFileName)
+	err = f.Run(job.LocalSource, dest, p.Data)
 	if err != nil {
 		close(progressCh)
 		return err
