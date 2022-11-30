@@ -125,6 +125,7 @@ func localUpload(job types.Job) error {
 			return nil
 		}
 		filelist = append(filelist, path)
+		return nil
 	})
 	
 	for i, file := range filelist {
