@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path"
+	"log"
 	"strings"
 )
 
