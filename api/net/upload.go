@@ -132,7 +132,7 @@ func localUpload(job types.Job) error {
 	})
 	
 	for _, file := range filelist {
-		os.MkdirAll(configPath+"/"+job.GUID, 0644)
+		os.MkdirAll(configPath+"/"+job.GUID, 0774)
 		MoveFile(file, configPath+"/"+job.GUID+"/"+p.Output)
 	}
 	return nil
