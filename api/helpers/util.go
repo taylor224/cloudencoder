@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"path"
+	"strings"
 )
 
 func CreateLocalSourcePath(workDir string, src string, ID string) string {
@@ -13,7 +14,9 @@ func CreateLocalSourcePath(workDir string, src string, ID string) string {
 	os.MkdirAll(tmpDir, 0700)
 	os.MkdirAll(tmpDir+"src", 0700)
 	os.MkdirAll(tmpDir+"dst", 0700)
-	return tmpDir + path.Base(ID)
+	slices := strings.Split(src, ".")
+	ext := slices[len(slices)-1]
+	return tmpDir + path.Base(ID+ext)
 }
 
 func GetTmpPath(workDir string, ID string) string {
