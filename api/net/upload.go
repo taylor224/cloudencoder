@@ -10,7 +10,9 @@ import (
 	"path/filepath"
 
 	"github.com/alfg/openencoder/api/data"
+	"github.com/alfg/openencoder/api/config"
 	"github.com/alfg/openencoder/api/types"
+	"github.com/alfg/openencoder/api/helpers"
 )
 
 func MoveFile(sourcePath, destPath string) error {
@@ -115,9 +117,10 @@ func localUpload(job types.Job) error {
 	settings := db.Settings.GetSettings()
 
 	configPath := types.GetSetting(types.LocalPath, settings)
+	tmpPath := helpers.GetTmpPath(config.Get().WorkDirectory, job.GUID)
 	
 	filelist := []string{}
-	filepath.Walk(job.LocalSource+"/dst", func(path string, f os.FileInfo, err error) error {
+	filepath.Walk(tmpPath+"/dst", func(path string, f os.FileInfo, err error) error {
 		if isDirectory(path) {
 			return nil
 		}
