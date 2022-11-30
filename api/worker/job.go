@@ -8,6 +8,7 @@ import (
 	"path"
 	"strconv"
 	"time"
+	"strings"
 
 	"github.com/alfg/openencoder/api/config"
 	"github.com/alfg/openencoder/api/data"
@@ -89,7 +90,7 @@ func encode(job types.Job, probeData *encoder.FFProbeResponse) error {
 	db := data.New()
 	db.Jobs.UpdateJobStatusByGUID(job.GUID, types.JobEncoding)
 
-	p, err := db.Presets.GetPresetByName(job.Preset)
+	_, err := db.Presets.GetPresetByName(job.Preset)
 	if err != nil {
 		return err
 	}
