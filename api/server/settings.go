@@ -9,7 +9,7 @@ import (
 )
 
 type settingsUpdateRequest struct {
-	StorageDriver string `json:"STORAGE_DRIVER" binding:"eq=s3|eq=ftp"`
+	StorageDriver string `json:"STORAGE_DRIVER" binding:"eq=s3|eq=ftp|ep=local"`
 
 	S3AccessKey            string `json:"S3_ACCESS_KEY"`
 	S3SecretKey            string `json:"S3_SECRET_KEY"`
