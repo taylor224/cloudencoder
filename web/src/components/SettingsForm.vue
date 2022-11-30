@@ -91,6 +91,7 @@ const SORTED_OPTIONS = [
   'FTP_ADDR',
   'FTP_USERNAME',
   'FTP_PASSWORD',
+  'LOCAL_PATH',
   'SLACK_WEBHOOK',
 ];
 
@@ -179,7 +180,7 @@ export default {
     },
 
     isHidden(inputName) {
-      const options = ['FTP', 'S3'];
+      const options = ['FTP', 'S3', 'Local'];
       const prefix = inputName.split('_')[0];
       const { STORAGE_DRIVER, S3_PROVIDER, DIGITAL_OCEAN_ENABLED } = this.form;
 
