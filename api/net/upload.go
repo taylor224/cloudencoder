@@ -117,7 +117,7 @@ func localUpload(job types.Job) error {
 	configPath := types.GetSetting(types.LocalPath, settings)
 	
 	filelist := []string{}
-	filepath.Walk(path.Dir(job.LocalSource)+"/dst", func(path string, f os.FileInfo, err error) error {
+	filepath.Walk(path.Dir(job.LocalSource+"/dst"), func(path string, f os.FileInfo, err error) error {
 		if isDirectory(path) {
 			return nil
 		}
