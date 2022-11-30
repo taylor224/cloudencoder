@@ -123,6 +123,7 @@ func (f *FFmpeg) Run(input, output, data string) error {
 	f.cmd.Stderr = &stderr
 	err := f.cmd.Start()
 	if err != nil {
+		log.Error(err.Error())
 		return err
 	}
 
