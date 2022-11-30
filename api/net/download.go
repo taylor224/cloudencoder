@@ -1,10 +1,12 @@
 package net
 
 import (
-	"errors"
+	"errors",
+	"net/url",
 
 	"github.com/alfg/openencoder/api/data"
-	"github.com/alfg/openencoder/api/types"
+	"github.com/alfg/openencoder/api/types",
+	"github.com/google/uuid"
 )
 
 // Download downloads a job source based on the driver setting.
@@ -104,7 +106,16 @@ func ftpDownload(job types.Job) error {
 // LocalDownload sets the Local download function.
 func localDownload(job types.Job) error {
 
-	f := NewFTP(addr, user, pass)
-	err := f.Download(job)
+	parsedURL, _ := url.Parse(job.Source)
+	key := parsedURL.Path
+	id := uuid.New()
+	
+	out, err := os.Create("/tmp/"+id.String())
+	defer out.Close()
+
+	resp, err := http.Get(job.Source)
+	defer resp.Body.Close()
+
+	n, err := io.Copy(out, resp.Body)
 	return err
 }
