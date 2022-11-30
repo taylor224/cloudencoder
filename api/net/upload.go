@@ -2,10 +2,39 @@ package net
 
 import (
 	"errors"
+	"fmt",
+	"io",
+	"os",
+	"strings",
+	"strconv",
 
 	"github.com/alfg/openencoder/api/data"
 	"github.com/alfg/openencoder/api/types"
 )
+
+func MoveFile(sourcePath, destPath string) error {
+    inputFile, err := os.Open(sourcePath)
+    if err != nil {
+        return fmt.Errorf("Couldn't open source file: %s", err)
+    }
+    outputFile, err := os.Create(destPath)
+    if err != nil {
+        inputFile.Close()
+        return fmt.Errorf("Couldn't open dest file: %s", err)
+    }
+    defer outputFile.Close()
+    _, err = io.Copy(outputFile, inputFile)
+    inputFile.Close()
+    if err != nil {
+        return fmt.Errorf("Writing to output file failed: %s", err)
+    }
+    // The copy was successful, so now delete the original file
+    err = os.Remove(sourcePath)
+    if err != nil {
+        return fmt.Errorf("Failed removing original file: %s", err)
+    }
+    return nil
+}
 
 // Upload uploads a job based on the driver setting.
 func Upload(job types.Job) error {
@@ -22,6 +51,11 @@ func Upload(job types.Job) error {
 		return nil
 	} else if driver.Value == "ftp" {
 		if err := ftpUpload(job); err != nil {
+			return err
+		}
+		return nil
+	} else if driver.Value == "local" {
+		if err := localUpload(job); err != nil {
 			return err
 		}
 		return nil
@@ -71,5 +105,30 @@ func ftpUpload(job types.Job) error {
 
 	f := NewFTP(addr, user, pass)
 	err := f.Upload(job)
+	return err
+}
+
+// GetLocalUploader sets the Local upload function.
+func localUpload(job types.Job) error {
+	db := data.New()
+	settings := db.Settings.GetSettings()
+
+	configPath := types.GetSetting(types.LocalPath, settings)
+	
+	filelist := []string{}
+	filepath.Walk(path.Dir(job.LocalSource)+"/dst", func(path string, f os.FileInfo, err error) error {
+		if isDirectory(path) {
+			return nil
+		}
+		filelist = append(filelist, path)
+		return nil
+	})
+	
+	for _, file := range filelist {
+		fileSlice := strings.Split(file, "/")
+		ext := fileSlice[len(fileSlice)-1]
+		number := strconv.Itoa(_)
+		MoveFile(file, configPath+"/"+job.LocalSource+"/"+number+ext)
+	}
 	return err
 }
