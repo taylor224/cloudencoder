@@ -131,9 +131,14 @@ func localUpload(job types.Job) error {
 		return nil
 	})
 	
+	outputDirectory := configPath+"/"+job.GUID
+	os.Chown(outputDirectory, "nginx", "nginx")
+	
 	for _, file := range filelist {
-		os.MkdirAll(configPath+"/"+job.GUID, 0774)
-		MoveFile(file, configPath+"/"+job.GUID+"/"+p.Output)
+		outputFilePath := configPath+"/"+job.GUID+"/"+p.Output
+		os.MkdirAll(outputDirectory, 0774)
+		MoveFile(file, outputFilePath)
+		os.Chown(outputFilePath, "nginx", "nginx")
 	}
 	return nil
 }
