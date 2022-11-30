@@ -134,14 +134,16 @@ func localUpload(job types.Job) error {
 	})
 	
 	group, err := user.Lookup("nginx")
+	uid, _ := strconv.Atoi(group.Uid)
+	gid, _ := strconv.Atoi(group.Gid)
 	outputDirectory := configPath+"/"+job.GUID
-	os.Chown(outputDirectory, strconv.Atoi(group.Uid), strconv.Atoi(group.Gid))
+	os.Chown(outputDirectory, uid, gid)
 	
 	for _, file := range filelist {
 		outputFilePath := configPath+"/"+job.GUID+"/"+p.Output
 		os.MkdirAll(outputDirectory, 0774)
 		MoveFile(file, outputFilePath)
-		os.Chown(outputFilePath, strconv.Atoi(group.Uid), strconv.Atoi(group.Gid))
+		os.Chown(outputFilePath, uid, gid)
 	}
 	return nil
 }
