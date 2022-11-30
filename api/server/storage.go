@@ -2,6 +2,7 @@ package server
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/alfg/openencoder/api/data"
 	"github.com/alfg/openencoder/api/net"
@@ -14,6 +15,7 @@ import (
 const (
 	StorageS3  = "s3"
 	StorageFTP = "ftp"
+	StorageLocal = "local"
 )
 
 type storageListResponse struct {
@@ -57,6 +59,8 @@ func getFileList(driver string, prefix string) *storageListResponse {
 		resp, _ = getS3FileList(prefix)
 	} else if driver == StorageFTP {
 		resp, _ = getFTPFileList(prefix)
+	} else if driver == StorageLocal {
+		resp, _ = getLocalFileList(prefix)
 	}
 	return resp
 }
@@ -113,6 +117,32 @@ func getFTPFileList(prefix string) (*storageListResponse, error) {
 
 	for _, item := range files {
 		if item.Type != ftp.EntryTypeFolder {
+			var obj file
+			obj.Name = item.Name
+			obj.Size = int64(item.Size)
+			resp.Files = append(resp.Files, obj)
+		} else {
+			resp.Folders = append(resp.Folders, item.Name+"/")
+		}
+	}
+	return resp, nil
+}
+
+func getLocalFileList(prefix string) (*storageListResponse, error) {
+	db := data.New()
+	settings := db.Settings.GetSettings()
+
+	path := types.GetSetting(types.LocalPath, settings)
+
+	files, err := os.ReadDir(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	resp := &storageListResponse{}
+
+	for _, item := range files {
+		if !item.IsDir() {
 			var obj file
 			obj.Name = item.Name
 			obj.Size = int64(item.Size)
