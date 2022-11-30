@@ -118,6 +118,6 @@ func localDownload(job types.Job) error {
 		panic(err)
 	}
 
-	_, err := io.Copy(out, resp.Body)
+	_, err = io.Copy(out, resp.Body)
 	return err
 }
