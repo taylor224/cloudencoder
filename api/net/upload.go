@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"strconv"
+	"path/filepath"
 
 	"github.com/alfg/openencoder/api/data"
 	"github.com/alfg/openencoder/api/types"
