@@ -26,6 +26,11 @@ func Download(job types.Job) error {
 			return err
 		}
 		return nil
+	} else if driver == "local" {
+		if err := fileDownload(job); err != nil {
+			return err
+		}
+		return nil
 	}
 	return errors.New("no driver set")
 }
@@ -90,6 +95,14 @@ func ftpDownload(job types.Job) error {
 	addr := types.GetSetting(types.FTPAddr, settings)
 	user := types.GetSetting(types.FTPUsername, settings)
 	pass := types.GetSetting(types.FTPPassword, settings)
+
+	f := NewFTP(addr, user, pass)
+	err := f.Download(job)
+	return err
+}
+
+// LocalDownload sets the Local download function.
+func localDownload(job types.Job) error {
 
 	f := NewFTP(addr, user, pass)
 	err := f.Download(job)
