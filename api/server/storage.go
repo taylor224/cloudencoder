@@ -145,7 +145,7 @@ func getLocalFileList(prefix string) (*storageListResponse, error) {
 		if !item.IsDir() {
 			var obj file
 			obj.Name = item.Name()
-			fi, err := f.Stat(path + "/" + item.Name())
+			fi, err := item.Stat()
 			if err != nil {
 			  // Could not obtain stat, handle error
 			}
