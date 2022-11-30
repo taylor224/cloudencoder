@@ -3,7 +3,6 @@ package net
 import (
 	"errors"
 	"os"
-	"io"
 	"net/http"
 
 	"github.com/alfg/openencoder/api/data"
@@ -106,7 +105,7 @@ func ftpDownload(job types.Job) error {
 
 // LocalDownload sets the Local download function.
 func localDownload(job types.Job) error {
-	out, err := os.Create(job.LocalSource)
+	out, _ := os.OpenFile(job.LocalSource, os.O_WRONLY|os.O_CREATE, 0644)
 	defer out.Close()
 
 	resp, err := http.Get(job.Source)
@@ -118,6 +117,6 @@ func localDownload(job types.Job) error {
 		panic(err)
 	}
 
-	_, err = io.Copy(out, resp.Body)
+	_, err = out.Write(resp.Body)
 	return err
 }
