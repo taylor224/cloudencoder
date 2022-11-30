@@ -149,7 +149,7 @@ func getLocalFileList(prefix string) (*storageListResponse, error) {
 			if err != nil {
 			  // Could not obtain stat, handle error
 			}
-			obj.Size = int64(fi.Size)
+			obj.Size = fi.Size
 			resp.Files = append(resp.Files, obj)
 		} else {
 			resp.Folders = append(resp.Folders, item.Name()+"/")
