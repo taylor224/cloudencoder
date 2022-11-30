@@ -131,6 +131,7 @@ func localUpload(job types.Job) error {
 		fileSlice := strings.Split(file, "/")
 		ext := fileSlice[len(fileSlice)-1]
 		number := strconv.Itoa(i)
+		os.MkdirAll(configPath+"/"+job.LocalSource, 0700)
 		MoveFile(file, configPath+"/"+job.LocalSource+"/"+number+ext)
 	}
 	return nil
