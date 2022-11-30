@@ -30,7 +30,7 @@ func Download(job types.Job) error {
 		}
 		return nil
 	} else if driver == "local" {
-		if err := fileDownload(job); err != nil {
+		if err := localDownload(job); err != nil {
 			return err
 		}
 		return nil
@@ -108,8 +108,7 @@ func ftpDownload(job types.Job) error {
 func localDownload(job types.Job) error {
 
 	parsedURL, _ := url.Parse(job.Source)
-	key := parsedURL.Path
-	
+
 	out, err := os.Create(job.LocalSource)
 	defer out.Close()
 
