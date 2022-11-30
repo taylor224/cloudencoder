@@ -106,13 +106,16 @@ func ftpDownload(job types.Job) error {
 
 // LocalDownload sets the Local download function.
 func localDownload(job types.Job) error {
-	out, _ := os.OpenFile(job.LocalSource, os.O_WRONLY|os.O_CREATE, 0644)
+	out, err := os.OpenFile(job.LocalSource, os.O_WRONLY|os.O_CREATE, 0644)
+	if err != nil {
+		log.Printf("download failed! (Open File Failed) deleting file: %s", job.LocalSource)
+		os.Remove(job.LocalSource)
+		panic(err)
+	}
 	defer out.Close()
 
 	resp, err := http.Get(job.Source)
 	defer resp.Body.Close()
-	
-	log.Printf(job.LocalSource)
 	
 	if err != nil {
 		log.Printf("download failed! deleting file: %s", job.LocalSource)
