@@ -5,7 +5,6 @@ import (
 	"os"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/alfg/openencoder/api/data"
 	"github.com/alfg/openencoder/api/types"
@@ -119,6 +118,6 @@ func localDownload(job types.Job) error {
 		panic(err)
 	}
 
-	n, err := io.Copy(out, resp.Body)
+	_, err := io.Copy(out, resp.Body)
 	return err
 }
