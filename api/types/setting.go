@@ -17,6 +17,8 @@ const (
 	FTPAddr     = "FTP_ADDR"
 	FTPUsername = "FTP_USERNAME"
 	FTPPassword = "FTP_PASSWORD"
+	
+	LocalPath = "LOCAL_PATH"
 
 	DigitalOceanEnabled     = "DIGITAL_OCEAN_ENABLED"
 	DigitalOceanAccessToken = "DIGITAL_OCEAN_ACCESS_TOKEN"
