@@ -112,7 +112,7 @@ func localDownload(job types.Job) error {
 	resp, err := http.Get(job.Source)
 	defer resp.Body.Close()
 	
-	log.Printf("download finished!")
+	log.Printf(job.LocalSource)
 	
 	if err != nil {
 		log.Printf("download failed! deleting file: %s", job.LocalSource)
