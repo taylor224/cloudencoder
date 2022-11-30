@@ -120,12 +120,11 @@ func localUpload(job types.Job) error {
 	tmpPath := helpers.GetTmpPath(config.Get().WorkDirectory, job.GUID)
 	
 	filelist := []string{}
-	filepath.Walk(tmpPath+"/dst", func(path string, f os.FileInfo, err error) error {
+	filepath.Walk(tmpPath+"dst", func(path string, f os.FileInfo, err error) error {
 		if isDirectory(path) {
 			return nil
 		}
 		filelist = append(filelist, path)
-		return nil
 	})
 	
 	for i, file := range filelist {
