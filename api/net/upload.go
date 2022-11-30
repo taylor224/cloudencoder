@@ -6,7 +6,6 @@ import (
 	"io"
 	"os"
 	"strings"
-	"strconv"
 	"path/filepath"
 
 	"github.com/alfg/openencoder/api/data"
@@ -130,8 +129,6 @@ func localUpload(job types.Job) error {
 	
 	for i, file := range filelist {
 		fileSlice := strings.Split(file, "/")
-		ext := fileSlice[len(fileSlice)-1]
-		number := strconv.Itoa(i)
 		os.MkdirAll(configPath+"/"+job.GUID, 0644)
 		MoveFile(file, configPath+"/"+job.GUID+"/")
 	}
