@@ -93,7 +93,7 @@ func encode(job types.Job, probeData *encoder.FFProbeResponse) error {
 	if err != nil {
 		return err
 	}
-	slices := strings.Split(job.Source, "/")
+	slices := strings.Split(job.Source, ".")
 	ext := slices[len(slices)-1]
 	destFileName := job.GUID + "." + ext
 	dest := path.Dir(job.LocalSource) + "/dst/" + destFileName
