@@ -125,11 +125,11 @@ func localUpload(job types.Job) error {
 		return nil
 	})
 	
-	for _, file := range filelist {
+	for i, file := range filelist {
 		fileSlice := strings.Split(file, "/")
 		ext := fileSlice[len(fileSlice)-1]
-		number := strconv.Itoa(_)
+		number := strconv.Itoa(i)
 		MoveFile(file, configPath+"/"+job.LocalSource+"/"+number+ext)
 	}
-	return err
+	return nil
 }
