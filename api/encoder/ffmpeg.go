@@ -237,6 +237,9 @@ func parseOptions(input, output, data string) []string {
 		"-hide_banner",
 		"-loglevel", "error", // Set loglevel to fail job on errors.
 		"-progress", "pipe:1",
+		"-vsync": "0",
+		"-hwaccel": "nvdec",
+		"-hwaccel_output_format": "cuda",
 		"-i", input,
 	}
 
