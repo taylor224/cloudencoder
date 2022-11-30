@@ -2,6 +2,9 @@ package net
 
 import (
 	"errors"
+	"os"
+	"file"
+	"net/http"
 	"net/url"
 
 	"github.com/alfg/openencoder/api/data"
