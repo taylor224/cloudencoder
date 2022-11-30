@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/user"
 	"path/filepath"
 
 	"github.com/alfg/openencoder/api/data"
@@ -131,14 +132,15 @@ func localUpload(job types.Job) error {
 		return nil
 	})
 	
+	group, err := user.Lookup("nginx")
 	outputDirectory := configPath+"/"+job.GUID
-	os.Chown(outputDirectory, "nginx", "nginx")
+	os.Chown(outputDirectory, group.Uid, group.Gid)
 	
 	for _, file := range filelist {
 		outputFilePath := configPath+"/"+job.GUID+"/"+p.Output
 		os.MkdirAll(outputDirectory, 0774)
 		MoveFile(file, outputFilePath)
-		os.Chown(outputFilePath, "nginx", "nginx")
+		os.Chown(outputFilePath, group.Uid, group.Gid)
 	}
 	return nil
 }
