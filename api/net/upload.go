@@ -117,6 +117,11 @@ func localUpload(job types.Job) error {
 	configPath := types.GetSetting(types.LocalPath, settings)
 	tmpPath := helpers.GetTmpPath(config.Get().WorkDirectory, job.GUID)
 	
+	p, err := db.Presets.GetPresetByName(job.Preset)
+	if err != nil {
+		return err
+	}
+	
 	filelist := []string{}
 	filepath.Walk(tmpPath+"dst", func(path string, f os.FileInfo, err error) error {
 		if isDirectory(path) {
@@ -128,7 +133,7 @@ func localUpload(job types.Job) error {
 	
 	for _, file := range filelist {
 		os.MkdirAll(configPath+"/"+job.GUID, 0644)
-		MoveFile(file, configPath+"/"+job.GUID+"/"+job.GUID+".mp4")
+		MoveFile(file, configPath+"/"+job.GUID+"/"+p.Output)
 	}
 	return nil
 }
