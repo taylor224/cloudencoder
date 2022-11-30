@@ -90,7 +90,7 @@ func encode(job types.Job, probeData *encoder.FFProbeResponse) error {
 	db := data.New()
 	db.Jobs.UpdateJobStatusByGUID(job.GUID, types.JobEncoding)
 
-	_, err := db.Presets.GetPresetByName(job.Preset)
+	p, err := db.Presets.GetPresetByName(job.Preset)
 	if err != nil {
 		return err
 	}
