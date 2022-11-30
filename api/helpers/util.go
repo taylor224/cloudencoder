@@ -16,7 +16,7 @@ func CreateLocalSourcePath(workDir string, src string, ID string) string {
 	os.MkdirAll(tmpDir+"dst", 0700)
 	slices := strings.Split(src, ".")
 	ext := slices[len(slices)-1]
-	return tmpDir + path.Base(ID+ext)
+	return tmpDir + path.Base(ID+"."+ext)
 }
 
 func GetTmpPath(workDir string, ID string) string {
