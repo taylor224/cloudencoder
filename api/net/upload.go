@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"path/filepath"
 
 	"github.com/alfg/openencoder/api/data"
