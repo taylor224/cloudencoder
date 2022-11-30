@@ -11,7 +11,6 @@ import (
 func CreateLocalSourcePath(workDir string, src string, ID string) string {
 	// Get local destination path.
 	tmpDir := workDir + "/" + ID + "/"
-	log.Info(tmpDir)
 	os.MkdirAll(tmpDir, 0700)
 	os.MkdirAll(tmpDir+"src", 0700)
 	os.MkdirAll(tmpDir+"dst", 0700)
