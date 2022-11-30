@@ -123,7 +123,6 @@ func (f *FFmpeg) Run(input, output, data string) error {
 	f.cmd.Stderr = &stderr
 	err := f.cmd.Start()
 	if err != nil {
-		log.Error(err.Error())
 		return err
 	}
 
@@ -166,6 +165,7 @@ func (f *FFmpeg) updateProgress(stdout io.ReadCloser) {
 
 	for scanner.Scan() {
 		line := scanner.Text()
+		log.Info(line)
 		str := strings.Replace(line, " ", "", -1)
 
 		parts := strings.Split(str, " ")
