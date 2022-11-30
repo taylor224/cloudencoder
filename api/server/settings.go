@@ -24,6 +24,8 @@ type settingsUpdateRequest struct {
 	FTPAddr     string `json:"FTP_ADDR"`
 	FTPUsername string `json:"FTP_USERNAME"`
 	FTPPassword string `json:"FTP_PASSWORD"`
+	
+	LocalPath string `json:"LOCAL_PATH"`
 
 	DigitalOceanEnabled     string `json:"DIGITAL_OCEAN_ENABLED" binding:"eq=enabled|eq=disabled"`
 	DigitalOceanAccessToken string `json:"DIGITAL_OCEAN_ACCESS_TOKEN"`
@@ -99,6 +101,8 @@ func updateSettingsHandler(c *gin.Context) {
 		types.FTPAddr:     json.FTPAddr,
 		types.FTPUsername: json.FTPUsername,
 		types.FTPPassword: json.FTPPassword,
+		
+		types.LocalPath: json.LocalPath,
 
 		types.DigitalOceanEnabled:     json.DigitalOceanEnabled,
 		types.DigitalOceanAccessToken: json.DigitalOceanAccessToken,
