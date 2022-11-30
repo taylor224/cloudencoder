@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"os/user"
 	"path/filepath"
 
@@ -134,13 +135,13 @@ func localUpload(job types.Job) error {
 	
 	group, err := user.Lookup("nginx")
 	outputDirectory := configPath+"/"+job.GUID
-	os.Chown(outputDirectory, group.Uid, group.Gid)
+	os.Chown(outputDirectory, strconv.Atoi(group.Uid), strconv.Atoi(group.Gid))
 	
 	for _, file := range filelist {
 		outputFilePath := configPath+"/"+job.GUID+"/"+p.Output
 		os.MkdirAll(outputDirectory, 0774)
 		MoveFile(file, outputFilePath)
-		os.Chown(outputFilePath, group.Uid, group.Gid)
+		os.Chown(outputFilePath, strconv.Atoi(group.Uid), strconv.Atoi(group.Gid))
 	}
 	return nil
 }
