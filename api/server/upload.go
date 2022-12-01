@@ -6,7 +6,7 @@ import (
 	"io"
 	"fmt"
 	"time"
-	"json"
+	"encoding/json"
 	"path/filepath"
 )
 
