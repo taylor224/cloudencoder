@@ -44,7 +44,7 @@ func uploadHandler(c *gin.Context) {
 
 	// Create a new file in the uploads directory
 	outputFileName := fmt.Sprintf("%d%s", time.Now().UnixNano(), filepath.Ext(fileHeader.Filename))
-	dst, err := os.Create(fmt.Sprintf("/tmp/uploads/%d%s", outputFileName))
+	dst, err := os.Create(fmt.Sprintf("/tmp/uploads/%s", outputFileName))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
