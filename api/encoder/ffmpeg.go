@@ -111,7 +111,7 @@ type filterOptions struct {
 func (f *FFmpeg) Run(input, output, data string) error {
 
 	// Parse options and add to args slice.
-	args := parseOptions(input, output, data)
+	args := parseOptions(input, output, data, false)
 
 	// Execute command.
 	log.Info("running FFmpeg with options: ", args)
@@ -124,21 +124,23 @@ func (f *FFmpeg) Run(input, output, data string) error {
 	err := f.cmd.Start()
 	if err != nil {
 		log.Error(err.Error())
+		
+		// Disable HW Accel and Retry
+		args = parseOptions(input, output, data, true)
+		log.Info("running FFmpeg with options: ", args)
+		f.cmd = exec.Command(ffmpegCmd, args...)
+		stdout, _ = f.cmd.StdoutPipe()
+
+		// Capture stderr (if any).
+		var stderr bytes.Buffer
+		f.cmd.Stderr = &stderr
+		err := f.cmd.Start()
+		if err != nil {
+			log.Error(err.Error())
+			return err
+		}
 	}
 	
-	log.Info("running FFmpeg with options: ", args)
-	f.cmd = exec.Command(ffmpegCmd, args...)
-	stdout, _ := f.cmd.StdoutPipe()
-
-	// Capture stderr (if any).
-	var stderr bytes.Buffer
-	f.cmd.Stderr = &stderr
-	err := f.cmd.Start()
-	if err != nil {
-		log.Error(err.Error())
-		return err
-	}
-
 	// Send progress updates.
 	go f.trackProgress()
 
