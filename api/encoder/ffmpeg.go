@@ -124,21 +124,7 @@ func (f *FFmpeg) Run(input, output, data string) error {
 	err := f.cmd.Start()
 	if err != nil {
 		log.Error(err.Error())
-		
-		// Disable HW Accel and Retry
-		args = parseOptions(input, output, data, true)
-		log.Info("running FFmpeg with options: ", args)
-		f.cmd = exec.Command(ffmpegCmd, args...)
-		stdout, _ = f.cmd.StdoutPipe()
-
-		// Capture stderr (if any).
-		var stderr bytes.Buffer
-		f.cmd.Stderr = &stderr
-		err := f.cmd.Start()
-		if err != nil {
-			log.Error(err.Error())
-			return err
-		}
+		return err
 	}
 	
 	// Send progress updates.
@@ -153,8 +139,30 @@ func (f *FFmpeg) Run(input, output, data string) error {
 		if f.isCancelled {
 			return errors.New("cancelled")
 		}
-		f.finish()
-		return err
+		// Disable HW Accel and Retry
+		args = parseOptions(input, output, data, true)
+		log.Info("RETRY running FFmpeg with options: ", args)
+		f.cmd = exec.Command(ffmpegCmd, args...)
+		stdout, _ = f.cmd.StdoutPipe()
+
+		// Capture stderr (if any).
+		var stderr bytes.Buffer
+		f.cmd.Stderr = &stderr
+		err := f.cmd.Start()
+		if err != nil {
+			log.Error(err.Error())
+			return err
+		}
+		
+		err = f.cmd.Wait()
+		if err != nil {
+			log.Error(err.Error())
+			if f.isCancelled {
+				return errors.New("cancelled")
+			}
+			f.finish()
+			return err
+		}
 	}
 	f.finish()
 	return nil
