@@ -16,23 +16,15 @@ type uploadResponse struct {
 	FileName string    `json:"file_name"`
 }
 
-func uploadHandler(w http.ResponseWriter, r *http.Request) {
-  const MAX_UPLOAD_SIZE = 5 * 1024 * 1024 * 1024
-  
-	if r.Method != "POST" {
-		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
-		return
-	}
+func uploadHandler(c *gin.Context) {
+    const MAX_UPLOAD_SIZE = 5 * 1024 * 1024 * 1024
 
-  r.Body = http.MaxBytesReader(w, r.Body, MAX_UPLOAD_SIZE)
-	if err := r.ParseMultipartForm(MAX_UPLOAD_SIZE); err != nil {
-		http.Error(w, "The uploaded file is too big.", http.StatusBadRequest)
-		return
-	}
-  
-  // The argument to FormFile must match the name attribute
+	var w http.ResponseWriter = c.Writer
+	c.Request.Body = http.MaxBytesReader(w, c.Request.Body, MAX_UPLOAD_SIZE)
+
+	// The argument to FormFile must match the name attribute
 	// of the file input on the frontend
-	file, fileHeader, err := r.FormFile("file")
+	file, fileHeader, err := c.Request.FormFile("file")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -68,7 +60,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Fprintf(w, "Upload successful")
 	resp := uploadResponse{
- 		Message: "Uploaded",
+		Message: "Uploaded",
 		Status:  200,
 		FileName: outputFileName,
 	}
