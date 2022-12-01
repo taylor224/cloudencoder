@@ -62,11 +62,11 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "Upload successful")
-  resp := response{
-		Message: "Uploaded",
+	resp := response{
+ 		Message: "Uploaded",
 		Status:  200,
 		FileName: outputFileName,
 	}
-  w.Header().Set("Content-Type", "application/json")
-  json.NewEncoder(w).Encode()
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode()
 }
