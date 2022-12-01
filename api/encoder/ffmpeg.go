@@ -124,6 +124,18 @@ func (f *FFmpeg) Run(input, output, data string) error {
 	err := f.cmd.Start()
 	if err != nil {
 		log.Error(err.Error())
+	}
+	
+	log.Info("running FFmpeg with options: ", args)
+	f.cmd = exec.Command(ffmpegCmd, args...)
+	stdout, _ := f.cmd.StdoutPipe()
+
+	// Capture stderr (if any).
+	var stderr bytes.Buffer
+	f.cmd.Stderr = &stderr
+	err := f.cmd.Start()
+	if err != nil {
+		log.Error(err.Error())
 		return err
 	}
 
@@ -234,16 +246,20 @@ func (f *FFmpeg) finish() {
 }
 
 // Utilities for parsing ffmpeg options.
-func parseOptions(input, output, data string) []string {
+func parseOptions(input, output, data string, disableHWAccel bool) []string {
 	args := []string{
 		"-hide_banner",
 		"-loglevel", "error", // Set loglevel to fail job on errors.
 		"-progress", "pipe:1",
 		"-vsync", "0",
-		"-hwaccel", "nvdec",
 		"-hwaccel_output_format", "cuda",
-		"-i", input,
 	}
+	
+	if !disableHWAccel {
+		args = append(args, "-hwaccel", "nvdec")	
+	}
+	
+	args = append(args, "-i", input)
 
 	// Decode JSON get options list from data.
 	options := &ffmpegOptions{}
@@ -261,7 +277,7 @@ func parseOptions(input, output, data string) []string {
 	}
 
 	// Set options from struct.
-	args = append(args, transformOptions(options)...)
+	args = append(args, transformOptions(options, disableHWAccel)...)
 
 	// Set 2 pass output if option is set.
 	if options.Video.Pass == "2" {
@@ -366,12 +382,17 @@ func setVideoFlags(opt videoOptions) []string {
 	return args
 }
 
-func setVideoFilters(vopt videoOptions, opt filterOptions) string {
+func setVideoFilters(vopt videoOptions, opt filterOptions, disableHWAccel bool) string {
 	args := []string{}
 
 	// Speed.
 	if vopt.Speed != "" && vopt.Speed != "auto" {
 		args = append(args, []string{"setpts=" + vopt.Speed}...)
+	}
+	
+	scaleMethod := "scale_cuda="
+	if disableHWAccel {
+		scaleMethod = "scale="
 	}
 
 	// Scale.
@@ -379,11 +400,11 @@ func setVideoFilters(vopt videoOptions, opt filterOptions) string {
 	if vopt.Size != "" && vopt.Size != "source" {
 		var arg string
 		if vopt.Size == "custom" {
-			arg = "hwupload_cuda,scale_cuda=" + vopt.Width + ":" + vopt.Height
+			arg = scaleMethod + vopt.Width + ":" + vopt.Height
 		} else if vopt.Format == "widescreen" {
-			arg = "hwupload_cuda,scale_cuda=" + vopt.Size + ":-1"
+			arg = scaleMethod + vopt.Size + ":-1"
 		} else {
-			arg = "hwupload_cuda,scale_cuda=-1:" + vopt.Size
+			arg = scaleMethod + "-1:" + vopt.Size
 		}
 		scaleFilters = append(scaleFilters, arg)
 	}
@@ -533,7 +554,7 @@ func set2Pass(args *[]string) []string {
 
 // transformOptions converts the ffmpegOptions{} struct and converts into
 // a slice of ffmpeg options to be passed to exec.Command arguments.
-func transformOptions(opt *ffmpegOptions) []string {
+func transformOptions(opt *ffmpegOptions, disableHWAccel bool) []string {
 	args := []string{}
 
 	// Set format flags if clip options are set.
@@ -546,7 +567,7 @@ func transformOptions(opt *ffmpegOptions) []string {
 	args = append(args, setVideoFlags(opt.Video)...)
 
 	// Video Filters.
-	vf := []string{"-vf", setVideoFilters(opt.Video, opt.Filter)}
+	vf := []string{"-vf", setVideoFilters(opt.Video, opt.Filter, disableHWAccel)}
 
 	// Only push -vf flag if there are video filter arguments.
 	if vf[1] != "" {
