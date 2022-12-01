@@ -23,6 +23,9 @@ func registerRoutes(r *gin.Engine) {
 
 		// Storage.
 		api.GET("/storage/list", storageListHandler)
+		
+		// Upload
+		api.POST("/upload", uploadHandler)
 
 		// Jobs.
 		api.POST("/jobs", createJobHandler)
