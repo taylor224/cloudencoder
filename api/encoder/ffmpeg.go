@@ -379,11 +379,11 @@ func setVideoFilters(vopt videoOptions, opt filterOptions) string {
 	if vopt.Size != "" && vopt.Size != "source" {
 		var arg string
 		if vopt.Size == "custom" {
-			arg = "scale_cuda=" + vopt.Width + ":" + vopt.Height
+			arg = "hwupload_cuda,scale_cuda=" + vopt.Width + ":" + vopt.Height
 		} else if vopt.Format == "widescreen" {
-			arg = "scale_cuda=" + vopt.Size + ":-1"
+			arg = "hwupload_cuda,scale_cuda=" + vopt.Size + ":-1"
 		} else {
-			arg = "scale_cuda=-1:" + vopt.Size
+			arg = "hwupload_cuda,scale_cuda=-1:" + vopt.Size
 		}
 		scaleFilters = append(scaleFilters, arg)
 	}
