@@ -60,7 +60,6 @@ func uploadHandler(c *gin.Context) {
 		return
 	}
 
-	fmt.Fprintf(w, "Upload successful")
 	resp := uploadResponse{
 		Message: "Uploaded",
 		Status:  200,
