@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"io"
 	"strings"
-	"fmt"
 
 	"github.com/alfg/openencoder/api/data"
 	"github.com/alfg/openencoder/api/types"
