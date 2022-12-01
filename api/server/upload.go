@@ -6,10 +6,11 @@ import (
 	"io"
 	"fmt"
 	"time"
+	"json"
 	"path/filepath"
 )
 
-type response struct {
+type uploadResponse struct {
 	Message string     `json:"message"`
 	Status  int        `json:"status"`
 	FileName string    `json:"file_name"`
@@ -66,7 +67,7 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "Upload successful")
-	resp := response{
+	resp := uploadResponse{
  		Message: "Uploaded",
 		Status:  200,
 		FileName: outputFileName,
