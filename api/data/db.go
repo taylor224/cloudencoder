@@ -19,7 +19,7 @@ var (
 	connectionString string
 	conn             *sqlx.DB
 	log              = logging.Log
-	connectionFormat = "host=%s port=%d user=%s password=%s dbname=%s sslmode=disable"
+	connectionFormat = "host=%s port=%d user=%s password=%s dbname=%s sslmode=require"
 )
 
 // ConnectDB Connects to postgres database
