@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 	"os"
+	"io"
 	"fmt"
 	"time"
 	"path/filepath"
@@ -11,7 +12,7 @@ import (
 type response struct {
 	Message string     `json:"message"`
 	Status  int        `json:"status"`
-	FileName string `json:"file_name"`
+	FileName string    `json:"file_name"`
 }
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
@@ -71,5 +72,5 @@ func uploadHandler(w http.ResponseWriter, r *http.Request) {
 		FileName: outputFileName,
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode()
+	json.NewEncoder(w).Encode(resp)
 }
