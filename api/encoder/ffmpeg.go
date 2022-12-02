@@ -141,7 +141,7 @@ func (f *FFmpeg) Run(input, output, data string) error {
 		}
 		
 		disableScale := false
-		if string(stderr).includes? "maybe incorrect parameters" {
+		if strings.Contains(string(stderr), "maybe incorrect parameters") {
 			disableScale = true
 		}
 		
