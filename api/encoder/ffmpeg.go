@@ -111,7 +111,7 @@ type filterOptions struct {
 func (f *FFmpeg) Run(input, output, data string) error {
 
 	// Parse options and add to args slice.
-	args := parseOptions(input, output, data, false)
+	args := parseOptions(input, output, data, false, false)
 
 	// Execute command.
 	log.Info("running FFmpeg with options: ", args)
@@ -139,8 +139,14 @@ func (f *FFmpeg) Run(input, output, data string) error {
 		if f.isCancelled {
 			return errors.New("cancelled")
 		}
+		
+		disableScale := false
+		if string(stderr).includes? "maybe incorrect parameters" {
+			disableScale = true
+		}
+		
 		// Disable HW Accel and Retry
-		args = parseOptions(input, output, data, true)
+		args = parseOptions(input, output, data, true, disableScale)
 		log.Info("RETRY running FFmpeg with options: ", args)
 		f.cmd = exec.Command(ffmpegCmd, args...)
 		stdout, _ = f.cmd.StdoutPipe()
@@ -256,7 +262,7 @@ func (f *FFmpeg) finish() {
 }
 
 // Utilities for parsing ffmpeg options.
-func parseOptions(input, output, data string, disableHWAccel bool) []string {
+func parseOptions(input, output, data string, disableHWAccel bool, disableScale bool) []string {
 	args := []string{
 		"-hide_banner",
 		"-loglevel", "error", // Set loglevel to fail job on errors.
@@ -284,6 +290,10 @@ func parseOptions(input, output, data string, disableHWAccel bool) []string {
 		}
 		args = append(args, output)
 		return args
+	}
+	
+	if disableScale {
+		options.Video.Size = "source"
 	}
 
 	// Set options from struct.
