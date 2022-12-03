@@ -287,7 +287,7 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 	}
 	
 	var originalWidth int
-	for _, stream := range probeData {
+	for _, stream := range probeData.streams {
 		if stream.Width {
 			originalWidth = stream.Width
 		}
