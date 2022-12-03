@@ -139,6 +139,7 @@ func (f *FFmpeg) Run(input, output, data string) error {
 		if f.isCancelled {
 			return errors.New("cancelled")
 		}
+		f.finish()
 		
 		disableScale := false
 		if strings.Contains(stderr.String(), "maybe incorrect parameters") {
@@ -167,7 +168,26 @@ func (f *FFmpeg) Run(input, output, data string) error {
 				return errors.New("cancelled")
 			}
 			f.finish()
-			return err
+			
+			disableScale := false
+			if strings.Contains(stderr.String(), "maybe incorrect parameters") {
+				disableScale = true
+			}
+			
+			// Disable HW Accel and Disable Scale and Retry
+			args = parseOptions(input, output, data, true, disableScale)
+			log.Info("RETRY 2nd running FFmpeg with options: ", args)
+			f.cmd = exec.Command(ffmpegCmd, args...)
+			stdout, _ = f.cmd.StdoutPipe()
+
+			// Capture stderr (if any).
+			var stderr bytes.Buffer
+			f.cmd.Stderr = &stderr
+			err := f.cmd.Start()
+			if err != nil {
+				log.Error(err.Error())
+				return err
+			}
 		}
 	}
 	f.finish()
