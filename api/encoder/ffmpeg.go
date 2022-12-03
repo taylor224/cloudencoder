@@ -262,7 +262,6 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 		"-hide_banner",
 		"-loglevel", "error", // Set loglevel to fail job on errors.
 		"-progress", "pipe:1",
-		"-vsync", "0",
 		"-hwaccel_output_format", "cuda",
 	}
 	
