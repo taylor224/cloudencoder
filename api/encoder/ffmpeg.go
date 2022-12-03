@@ -286,7 +286,14 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 		return args
 	}
 	
-	if options.Video.Size > probeData.Width {
+	var originalWidth int
+	for _, stream := range probeData {
+		if stream.Width {
+			originalWidth = stream.Width
+		}
+	}
+	
+	if options.Video.Size > originalWidth {
 		options.Video.Size = "source"
 	}
 
