@@ -595,7 +595,7 @@ func transformOptions(opt *ffmpegOptions, disableHWAccel bool) []string {
 	}
 
 	// Video flags.
-	args = append(args, setVideoFlags(opt.Video)...)
+	args = append(args, setVideoFlags(opt.Video, disableHWAccel)...)
 
 	// Video Filters.
 	vf := []string{"-vf", setVideoFilters(opt.Video, opt.Filter, disableHWAccel)}
