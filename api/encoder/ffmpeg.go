@@ -387,10 +387,10 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	}
 
 	// Frame Rate.
-	if opt.FrameRate != "" && opt.PixelFormat != "auto" {
-		args = append(args, []string{"-r", opt.FrameRate}...)
-	} else if opt.FrameRate == "auto" {
+	if if opt.FrameRate == "auto" {
 		args = append(args, []string{"-r", string(videoStreamData.AvgFrameRate)}...)
+	} else opt.FrameRate != "" && opt.PixelFormat != "auto" {
+		args = append(args, []string{"-r", opt.FrameRate}...)
 	}
 
 	// Tune.
