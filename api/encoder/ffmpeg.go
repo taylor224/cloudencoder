@@ -444,9 +444,9 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 		} else if vopt.Format == "auto" {
 			optWidth, _ := strconv.Atoi(vopt.Width)
 			
-			scaleX := optWidth / videoStreamData.Width
-			scaledWidth := videoStreamData.Width * scaleX
-			scaledHeight := videoStreamData.Height * scaleX
+			scaleX := float64(optWidth) / float64(videoStreamData.Width)
+			scaledWidth := float64(videoStreamData.Width) * scaleX
+			scaledHeight := float64(videoStreamData.Height) * scaleX
 			
 			strScaledWidth := strconv.Itoa(scaledWidth)
 			strScaledHeight := strconv.Itoa(scaledHeight)
