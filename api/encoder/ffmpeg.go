@@ -11,6 +11,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	
+	"github.com/alfg/openencoder/api/encoder"
 )
 
 const (
