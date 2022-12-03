@@ -382,7 +382,7 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	}
 
 	// Pixel Format.
-	if opt.PixelFormat != "" && opt.PixelFormat != "auto" {
+	if opt.PixelFormat != "" && opt.PixelFormat != "auto" && disableHWAccel {
 		args = append(args, []string{"-pix_fmt", opt.PixelFormat}...)
 	}
 
@@ -433,6 +433,8 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 	scaleMethod := "scale_cuda="
 	if disableHWAccel {
 		scaleMethod = "scale="
+	} else if !disableHWAccel && vopt.PixelFormat == "yuv420p" {
+		scaleMethod += "=format=yuv420p"
 	}
 
 	// Scale.
