@@ -331,7 +331,7 @@ func setFormatFlags(opt formatOptions) []string {
 	return args
 }
 
-func setVideoFlags(opt videoOptions, probeData *FFProbeResponse, disableHWAccel bool) []string {
+func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool) []string {
 	args := []string{}
 
 	// Video codec.
@@ -390,7 +390,7 @@ func setVideoFlags(opt videoOptions, probeData *FFProbeResponse, disableHWAccel 
 	if opt.FrameRate != "" && opt.PixelFormat != "auto" {
 		args = append(args, []string{"-r", opt.FrameRate}...)
 	} else if opt.FrameRate == "auto" {
-		args = append(args, []string{"-r", string(AvgFrameRate)}...)
+		args = append(args, []string{"-r", string(videoStreamData.AvgFrameRate)}...)
 	}
 
 	// Tune.
