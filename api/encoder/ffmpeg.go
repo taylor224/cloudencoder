@@ -448,8 +448,8 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 			scaledWidth := float64(videoStreamData.Width) * scaleX
 			scaledHeight := float64(videoStreamData.Height) * scaleX
 			
-			strScaledWidth := strconv.Itoa(scaledWidth)
-			strScaledHeight := strconv.Itoa(scaledHeight)
+			strScaledWidth := strconv.ParseFloat(scaledWidth, 64)
+			strScaledHeight := strconv.ParseFloat(scaledHeight, 64)
 			
 			arg = scaleMethod + strScaledWidth + "x" + strScaledHeight + ":-1"
 		} else if vopt.Format == "widescreen" {
