@@ -108,7 +108,7 @@ type filterOptions struct {
 }
 
 // Run runs the ffmpeg encoder with options.
-func (f *FFmpeg) Run(input, output, data string, probeData *encoder.FFProbeResponse) error {
+func (f *FFmpeg) Run(input, output, data string, probeData *FFProbeResponse) error {
 	// Parse options and add to args slice.
 	args := parseOptions(input, output, data, probeData, false)
 
