@@ -351,7 +351,7 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 		args = append(args, []string{"-preset", opt.Preset}...)
 	}
 	
-	args = append(args, []string{"-map", "0"}...)
+	args = append(args, []string{"-map_metadata", "0"}...)
 	args = append(args, []string{"-c:d", "copy"}...)
 	
 	// Change Resize Option by Video Format
