@@ -389,7 +389,9 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	// Frame Rate.
 	if opt.FrameRate == "auto" {
 		splitted := strings.Split(videoStreamData.RFrameRate, "/")
-		RFrameRate := strconv.Atoi(splitted[0]) / strconv.Atoi(splitted[1])
+		one, _ := strconv.Atoi(splitted[0])
+		two, _ := strconv.Atoi(splitted[1])
+		RFrameRate := one / two
 		
 		args = append(args, []string{"-r", string(RFrameRate)}...)
 	} else if opt.FrameRate != "" && opt.PixelFormat != "auto" {
