@@ -170,7 +170,7 @@ func (j JobsOp) GetEncodeProbeByID(id int64) (string, error) {
       WHERE id = $1`
 
 	db, _ := ConnectDB()
-	err := db.Get(&probe, query, guid)
+	err := db.Get(&probe, query, id)
 	if err != nil {
 		log.Error(err)
 	}
