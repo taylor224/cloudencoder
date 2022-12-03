@@ -329,12 +329,18 @@ func setFormatFlags(opt formatOptions) []string {
 	return args
 }
 
-func setVideoFlags(opt videoOptions) []string {
+func setVideoFlags(opt videoOptions, disableHWAccel bool) []string {
 	args := []string{}
 
 	// Video codec.
-	if opt.Codec != "" {
+	if opt.Codec != "" && !disableHWAccel {
 		args = append(args, []string{"-c:v", opt.Codec}...)
+	} else if opt.Codec != "" && disableHWAccel {
+		if strings.Contains(opt.Codec, "264") {
+			args = append(args, []string{"-c:v", "libx264"}...)
+		} else if strings.Contains(opt.Codec, "265") {
+			args = append(args, []string{"-c:v", "libx265"}...)
+		}
 	}
 
 	// Video preset.
