@@ -266,7 +266,8 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 	}
 	
 	if !disableHWAccel {
-		args = append(args, "-hwaccel", "nvdec")	
+		args = append(args, "-hwaccel", "nvdec")
+		args = append(args, "-c:v", "hevc_cuvid")
 	}
 	
 	args = append(args, "-i", input)
@@ -348,6 +349,30 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	// Video preset.
 	if opt.Preset != "" && opt.Preset != "none" {
 		args = append(args, []string{"-preset", opt.Preset}...)
+	}
+	
+	// Change Resize Option by Video Format
+	if opt.Format == "auto" {
+		optWidth, _ := strconv.Atoi(vopt.Width)
+			
+		scaleX := float64(optWidth) / float64(videoStreamData.Width)
+		scaledWidth := float64(videoStreamData.Width) * scaleX
+		scaledHeight := float64(videoStreamData.Height) * scaleX
+		finalWidth := int(math.Ceil(scaledWidth))
+		finalHeight := int(math.Ceil(scaledHeight))
+
+		if finalWidth % 2 != 0 {
+			finalWidth -= 1
+		}
+		if finalHeight % 2 != 0 {
+			finalHeight -= 1
+		}
+
+		strScaledWidth := fmt.Sprintf("%d", finalWidth)
+		strScaledHeight := fmt.Sprintf("%d", finalHeight)
+
+		resizeArg := strScaledWidth + "x" + strScaledHeight
+		args = append(args, []string{"-resize", resizeArg}...)
 	}
 
 	// CRF.
@@ -443,32 +468,16 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 		var arg string
 		if vopt.Size == "custom" {
 			arg = scaleMethod + vopt.Width + ":" + vopt.Height
+			scaleFilters = append(scaleFilters, arg)
 		} else if vopt.Format == "auto" {
-			optWidth, _ := strconv.Atoi(vopt.Width)
-			
-			scaleX := float64(optWidth) / float64(videoStreamData.Width)
-			scaledWidth := float64(videoStreamData.Width) * scaleX
-			scaledHeight := float64(videoStreamData.Height) * scaleX
-			finalWidth := int(math.Ceil(scaledWidth))
-			finalHeight := int(math.Ceil(scaledHeight))
-			
-			if finalWidth % 2 != 0 {
-				finalWidth -= 1
-			}
-			if finalHeight % 2 != 0 {
-				finalHeight -= 1
-			}
-			
-			strScaledWidth := fmt.Sprintf("%d", finalWidth)
-			strScaledHeight := fmt.Sprintf("%d", finalHeight)
-			
-			arg = scaleMethod + strScaledWidth + "x" + strScaledHeight
+			// Pass
 		} else if vopt.Format == "widescreen" {
 			arg = scaleMethod + vopt.Size + ":-1"
+			scaleFilters = append(scaleFilters, arg)
 		} else {
 			arg = scaleMethod + "-1:" + vopt.Size
+			scaleFilters = append(scaleFilters, arg)
 		}
-		scaleFilters = append(scaleFilters, arg)
 	}
 
 	if vopt.Scaling != "" && vopt.Scaling != "auto" {
