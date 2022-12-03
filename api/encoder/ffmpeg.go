@@ -442,12 +442,14 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 		if vopt.Size == "custom" {
 			arg = scaleMethod + vopt.Width + ":" + vopt.Height
 		} else if vopt.Format == "auto" {
-			scaleX := vopt.Width / videoStreamData.Width
+			optWidth, _ := strconv.Atoi(vopt.Width)
+			
+			scaleX := optWidth / videoStreamData.Width
 			scaledWidth := videoStreamData.Width * scaleX
 			scaledHeight := videoStreamData.Height * scaleX
 			
-			strScaledWidth, _ := strconv.Itoa(scaledWidth)
-			strScaledHeight, _ := strconv.Itoa(scaledHeight)
+			strScaledWidth := strconv.Itoa(scaledWidth)
+			strScaledHeight := strconv.Itoa(scaledHeight)
 			
 			arg = scaleMethod + strScaledWidth + "x" + strScaledHeight + ":-1"
 		} else if vopt.Format == "widescreen" {
