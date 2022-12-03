@@ -108,10 +108,9 @@ type filterOptions struct {
 }
 
 // Run runs the ffmpeg encoder with options.
-func (f *FFmpeg) Run(input, output, data string) error {
-
+func (f *FFmpeg) Run(input, output, data string, probeData *encoder.FFProbeResponse) error {
 	// Parse options and add to args slice.
-	args := parseOptions(input, output, data, false, false)
+	args := parseOptions(input, output, data, probeData, false)
 
 	// Execute command.
 	log.Info("running FFmpeg with options: ", args)
@@ -141,13 +140,8 @@ func (f *FFmpeg) Run(input, output, data string) error {
 		}
 		f.finish()
 		
-		disableScale := false
-		if strings.Contains(stderr.String(), "maybe incorrect parameters") {
-			disableScale = true
-		}
-		
 		// Disable HW Accel and Retry
-		args = parseOptions(input, output, data, true, disableScale)
+		args = parseOptions(input, output, data, probeData, true)
 		log.Info("RETRY running FFmpeg with options: ", args)
 		f.cmd = exec.Command(ffmpegCmd, args...)
 		stdout, _ = f.cmd.StdoutPipe()
@@ -168,26 +162,6 @@ func (f *FFmpeg) Run(input, output, data string) error {
 				return errors.New("cancelled")
 			}
 			f.finish()
-			
-			disableScale := false
-			if strings.Contains(stderr.String(), "maybe incorrect parameters") {
-				disableScale = true
-			}
-			
-			// Disable HW Accel and Disable Scale and Retry
-			args = parseOptions(input, output, data, true, disableScale)
-			log.Info("RETRY 2nd running FFmpeg with options: ", args)
-			f.cmd = exec.Command(ffmpegCmd, args...)
-			stdout, _ = f.cmd.StdoutPipe()
-
-			// Capture stderr (if any).
-			var stderr bytes.Buffer
-			f.cmd.Stderr = &stderr
-			err := f.cmd.Start()
-			if err != nil {
-				log.Error(err.Error())
-				return err
-			}
 		}
 	}
 	f.finish()
@@ -282,7 +256,7 @@ func (f *FFmpeg) finish() {
 }
 
 // Utilities for parsing ffmpeg options.
-func parseOptions(input, output, data string, disableHWAccel bool, disableScale bool) []string {
+func parseOptions(input, output, data string, probeData *encoder.FFProbeResponse, disableHWAccel bool) []string {
 	args := []string{
 		"-hide_banner",
 		"-loglevel", "error", // Set loglevel to fail job on errors.
@@ -312,7 +286,7 @@ func parseOptions(input, output, data string, disableHWAccel bool, disableScale 
 		return args
 	}
 	
-	if disableScale {
+	if options.Video.Size > probeData.Width {
 		options.Video.Size = "source"
 	}
 
