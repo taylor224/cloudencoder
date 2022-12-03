@@ -11,6 +11,7 @@ type Jobs interface {
 	GetJobByGUID(id string) (*types.Job, error)
 	GetJobStatusByID(id int64) (string, error)
 	GetJobStatusByGUID(guid string) (string, error)
+	GetEncodeProbeByID(id int64) (string, error)
 	GetJobsCount() int
 	GetJobsStats() (*[]Stats, error)
 	CreateJob(job types.Job) *types.Job
@@ -157,6 +158,24 @@ func (j JobsOp) GetJobsCount() int {
 	}
 	db.Close()
 	return count
+}
+
+// GetEncodeProbeByID Get FFProbe result by Encode ID
+func (j JobsOp) GetEncodeProbeByID(id int64) (string, error) {
+	var probe string
+	const query = `
+      SELECT
+        probe
+      FROM encode
+      WHERE id = $1`
+
+	db, _ := ConnectDB()
+	err := db.Get(&probe, query, guid)
+	if err != nil {
+		log.Error(err)
+	}
+	db.Close()
+	return probe, nil
 }
 
 // Stats struct for displaying status and count of a job.
