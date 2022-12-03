@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"math"
 )
 
 const (
@@ -448,8 +449,8 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 			scaledWidth := float64(videoStreamData.Width) * scaleX
 			scaledHeight := float64(videoStreamData.Height) * scaleX
 			
-			strScaledWidth := fmt.Sprintf("%f", scaledWidth)
-			strScaledHeight := fmt.Sprintf("%f", scaledHeight)
+			strScaledWidth := fmt.Sprintf("%d", math.Ceil(int(scaledWidth)))
+			strScaledHeight := fmt.Sprintf("%d", math.Ceil(int(scaledHeight)))
 			
 			arg = scaleMethod + strScaledWidth + "x" + strScaledHeight + ":-1"
 		} else if vopt.Format == "widescreen" {
