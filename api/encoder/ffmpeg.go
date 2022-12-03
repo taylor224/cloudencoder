@@ -287,9 +287,11 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 	}
 	
 	var originalWidth int
+	var videoStreamData stream
 	for _, stream := range probeData.Streams {
 		if stream.Width != 0 {
 			originalWidth = stream.Width
+			videoStreamData = stream
 		}
 	}
 	
@@ -302,7 +304,7 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 	}
 
 	// Set options from struct.
-	args = append(args, transformOptions(options, disableHWAccel)...)
+	args = append(args, transformOptions(options, videoStreamData, disableHWAccel)...)
 
 	// Set 2 pass output if option is set.
 	if options.Video.Pass == "2" {
@@ -329,7 +331,7 @@ func setFormatFlags(opt formatOptions) []string {
 	return args
 }
 
-func setVideoFlags(opt videoOptions, disableHWAccel bool) []string {
+func setVideoFlags(opt videoOptions, probeData *FFProbeResponse, disableHWAccel bool) []string {
 	args := []string{}
 
 	// Video codec.
@@ -387,6 +389,8 @@ func setVideoFlags(opt videoOptions, disableHWAccel bool) []string {
 	// Frame Rate.
 	if opt.FrameRate != "" && opt.PixelFormat != "auto" {
 		args = append(args, []string{"-r", opt.FrameRate}...)
+	} else if opt.FrameRate == "auto" {
+		args = append(args, []string{"-r", string(AvgFrameRate)}...)
 	}
 
 	// Tune.
@@ -585,7 +589,7 @@ func set2Pass(args *[]string) []string {
 
 // transformOptions converts the ffmpegOptions{} struct and converts into
 // a slice of ffmpeg options to be passed to exec.Command arguments.
-func transformOptions(opt *ffmpegOptions, disableHWAccel bool) []string {
+func transformOptions(opt *ffmpegOptions, videoStreamData stream, disableHWAccel bool) []string {
 	args := []string{}
 
 	// Set format flags if clip options are set.
@@ -595,7 +599,7 @@ func transformOptions(opt *ffmpegOptions, disableHWAccel bool) []string {
 	}
 
 	// Video flags.
-	args = append(args, setVideoFlags(opt.Video, disableHWAccel)...)
+	args = append(args, setVideoFlags(opt.Video, videoStreamData, disableHWAccel)...)
 
 	// Video Filters.
 	vf := []string{"-vf", setVideoFilters(opt.Video, opt.Filter, disableHWAccel)}
