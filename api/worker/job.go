@@ -103,7 +103,7 @@ func encode(job types.Job, probeData *encoder.FFProbeResponse) error {
 	// Run FFmpeg.
 	f := &encoder.FFmpeg{}
 	go trackEncodeProgress(j.GUID, j.EncodeID, probeData, f)
-	err = f.Run(job.LocalSource, dest, p.Data)
+	err = f.Run(job.LocalSource, dest, p.Data, probeData)
 	if err != nil {
 		close(progressCh)
 		return err
