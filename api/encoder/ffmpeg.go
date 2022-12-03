@@ -288,7 +288,7 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 	
 	var originalWidth int
 	for _, stream := range probeData.Streams {
-		if stream.Width != nil {
+		if stream.Width != 0 {
 			originalWidth = stream.Width
 		}
 	}
