@@ -293,7 +293,11 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 		}
 	}
 	
-	if int(options.Video.Size) > originalWidth {
+	optionSize, err = strconv.Atoi(options.Video.Size)
+	if err {
+		optionSize = 3840
+	}
+	if optionSize > originalWidth {
 		options.Video.Size = "source"
 	}
 
