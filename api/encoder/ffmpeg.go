@@ -11,8 +11,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	
-	"github.com/alfg/openencoder/api/encoder"
 )
 
 const (
@@ -258,7 +256,7 @@ func (f *FFmpeg) finish() {
 }
 
 // Utilities for parsing ffmpeg options.
-func parseOptions(input, output, data string, probeData *encoder.FFProbeResponse, disableHWAccel bool) []string {
+func parseOptions(input, output, data string, probeData *FFProbeResponse, disableHWAccel bool) []string {
 	args := []string{
 		"-hide_banner",
 		"-loglevel", "error", // Set loglevel to fail job on errors.
