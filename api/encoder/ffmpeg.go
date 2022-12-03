@@ -287,14 +287,14 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 	}
 	
 	var originalWidth int
-	for _, stream := range probeData.streams {
+	for _, stream := range probeData.Streams {
 		if stream.Width {
 			originalWidth = stream.Width
 		}
 	}
 	
 	optionSize, err := strconv.Atoi(options.Video.Size)
-	if err {
+	if err != nil {
 		optionSize = 3840
 	}
 	if optionSize > originalWidth {
