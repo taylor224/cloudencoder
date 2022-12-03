@@ -293,7 +293,7 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 		}
 	}
 	
-	optionSize, err = strconv.Atoi(options.Video.Size)
+	optionSize, err := strconv.Atoi(options.Video.Size)
 	if err {
 		optionSize = 3840
 	}
