@@ -471,6 +471,7 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 			scaleFilters = append(scaleFilters, arg)
 		} else if vopt.Format == "auto" {
 			// Pass
+			scaleFilters = append(scaleFilters, "scale_cuda=format=yuv420p")
 		} else if vopt.Format == "widescreen" {
 			arg = scaleMethod + vopt.Size + ":-1"
 			scaleFilters = append(scaleFilters, arg)
