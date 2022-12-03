@@ -422,7 +422,7 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	return args
 }
 
-func setVideoFilters(vopt videoOptions, opt filterOptions, disableHWAccel bool) string {
+func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData stream, disableHWAccel bool) string {
 	args := []string{}
 
 	// Speed.
@@ -441,6 +441,15 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, disableHWAccel bool) 
 		var arg string
 		if vopt.Size == "custom" {
 			arg = scaleMethod + vopt.Width + ":" + vopt.Height
+		} else if vopt.Format == "auto" {
+			scaleX = vopt.Width / videoStreamData.Width
+			scaledWidth = videoStreamData.Width * scaleX
+			scaledHeight = videoStreamData.Height * scaleX
+			
+			strScaledWidth, _ = strconv.Itoa(scaledWidth)
+			strScaledHeight, _ = strconv.Itoa(scaledHeight)
+			
+			arg = scaleMethod + strScaledWidth + "x" + strScaledHeight + ":-1"
 		} else if vopt.Format == "widescreen" {
 			arg = scaleMethod + vopt.Size + ":-1"
 		} else {
@@ -607,7 +616,7 @@ func transformOptions(opt *ffmpegOptions, videoStreamData stream, disableHWAccel
 	args = append(args, setVideoFlags(opt.Video, videoStreamData, disableHWAccel)...)
 
 	// Video Filters.
-	vf := []string{"-vf", setVideoFilters(opt.Video, opt.Filter, disableHWAccel)}
+	vf := []string{"-vf", setVideoFilters(opt.Video, opt.Filter, videoStreamData, disableHWAccel)}
 
 	// Only push -vf flag if there are video filter arguments.
 	if vf[1] != "" {
