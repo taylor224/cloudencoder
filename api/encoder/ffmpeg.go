@@ -276,9 +276,9 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 	
 	if !disableHWAccel {
 		args = append(args, "-hwaccel", "nvdec")
-		if strings.Contains(probeData.CodecName, "h264") {
+		if strings.Contains(strings.ToLower(videoStreamData.CodecName), "h264") {
 			args = append(args, "-c:v", "h264_cuvid")
-		} else if strings.Contains(strings.ToLower(videoStreamData.CodecName), "h264") || strings.Contains(strings.ToLower(videoStreamData.CodecName), "hevc") {
+		} else if strings.Contains(strings.ToLower(videoStreamData.CodecName), "h265") || strings.Contains(strings.ToLower(videoStreamData.CodecName), "hevc") {
 			args = append(args, "-c:v", "hevc_cuvid")
 		}
 	}
