@@ -358,7 +358,7 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	args = append(args, []string{"-map_metadata", "0"}...)
 	args = append(args, []string{"-c:d", "copy"}...)
 	
-	for _, side := range videoStreamData.SideDataList {
+	for _, side := range videoStreamData.sideDataList {
 		if side.Rotation != 0 {
 			args = append(args, []string{"-metadata:s:v", "rotate=\"" + strconv.Atoi(side.Rotation) + "\""}...)
 			break
