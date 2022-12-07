@@ -360,7 +360,8 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	
 	for _, side := range videoStreamData.sideDataList {
 		if side.Rotation != 0 {
-			args = append(args, []string{"-metadata:s:v", "rotate=\"" + strconv.Atoi(side.Rotation) + "\""}...)
+			stringRotation, _ = strconv.Atoi(side.Rotation)
+			args = append(args, []string{"-metadata:s:v", "rotate=\"" + stringRotation + "\""}...)
 			break
 		}
 	}
