@@ -99,7 +99,7 @@ type tags struct {
 }
 
 type sideDataList struct {
-	SideDatas []sideData `json:"side_data_list"`
+	SideDataList []sideData `json:"side_data_list"`
 }
 
 type sideData struct {
