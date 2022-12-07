@@ -75,6 +75,7 @@ type stream struct {
 	NbFrames           string      `json:"nb_frames"`
 	Disposition        disposition `json:"disposition"`
 	Tags               tags        `json:"tags"`
+	sideDataList       sideDataList `json:"side_data_list"`
 }
 
 type disposition struct {
