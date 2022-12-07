@@ -57,6 +57,7 @@ type stream struct {
 	SampleAspectRatio  string      `json:"sample_aspect_ratio"`
 	DisplayAspectRatio string      `json:"display_aspect_ratio"`
 	PixFmt             string      `json:"pix_fmt"`
+	ColorSpace             string      `json:"color_space"`
 	Level              int         `json:"level"`
 	ChromaLocation     string      `json:"chroma_location"`
 	Refs               int         `json:"refs"`
@@ -94,4 +95,12 @@ type disposition struct {
 type tags struct {
 	Language    string `json:"language"`
 	HandlerName string `json:"handler_name"`
+}
+
+type sideDataList struct {
+	SideDatas []sideData `json:"side_data_list"`
+}
+
+type sideData struct {
+	Rotation int `json:"rotation"`
 }
