@@ -265,11 +265,20 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 		"-hwaccel_output_format", "cuda",
 	}
 	
+	var originalWidth int
+	var videoStreamData stream
+	for _, stream := range probeData.Streams {
+		if stream.Width != 0 {
+			originalWidth = stream.Width
+			videoStreamData = stream
+		}
+	}
+	
 	if !disableHWAccel {
 		args = append(args, "-hwaccel", "nvdec")
 		if strings.Contains(probeData.CodecName, "h264") {
 			args = append(args, "-c:v", "h264_cuvid")
-		} else if strings.Contains(strings.ToLower(probeData.CodecName), "h264") || strings.Contains(strings.ToLower(probeData.CodecName), "hevc") {
+		} else if strings.Contains(strings.ToLower(videoStreamData.CodecName), "h264") || strings.Contains(strings.ToLower(videoStreamData.CodecName), "hevc") {
 			args = append(args, "-c:v", "hevc_cuvid")
 		}
 	}
@@ -289,15 +298,6 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 		}
 		args = append(args, output)
 		return args
-	}
-	
-	var originalWidth int
-	var videoStreamData stream
-	for _, stream := range probeData.Streams {
-		if stream.Width != 0 {
-			originalWidth = stream.Width
-			videoStreamData = stream
-		}
 	}
 	
 	optionSize, err := strconv.Atoi(options.Video.Size)
