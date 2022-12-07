@@ -265,10 +265,10 @@ func parseOptions(input, output, data string, probeData *FFProbeResponse, disabl
 		"-hwaccel_output_format", "cuda",
 	}
 	
-	if !disableHWAccel {
-		args = append(args, "-hwaccel", "nvdec")
-		args = append(args, "-c:v", "hevc_cuvid")
-	}
+// 	if !disableHWAccel {
+// 		args = append(args, "-hwaccel", "nvdec")
+// 		args = append(args, "-c:v", "hevc_cuvid")
+// 	}
 	
 	args = append(args, "-i", input)
 
