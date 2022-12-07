@@ -576,9 +576,9 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 		if side.Rotation != 0 {
 			stringTranspose := "1"
 			if side.Rotation == -90 {
-				stringTranspose = "2"	
+				stringTranspose = "1"	
 			} else if side.Rotation == 90 {
-				stringTranspose = "1"
+				stringTranspose = "2"
 			} else if side.Rotation == 180 {
 				stringTranspose = "1,transpose=1"
 			}
