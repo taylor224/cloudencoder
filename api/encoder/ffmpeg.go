@@ -358,6 +358,15 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	args = append(args, []string{"-map_metadata", "0"}...)
 	args = append(args, []string{"-c:d", "copy"}...)
 	
+	for _, side := range videoStreamData.SideDataList {
+		if side.Rotation != 0 {
+			args = append(args, []string{"-metadata:s:v", "rotate=\"" + strconv.Atoi(side.Rotation) + "\""}...)
+			break
+		}
+	}
+	
+	if stream.
+	
 	// Change Resize Option by Video Format
 	if opt.Format == "auto" && opt.Size != "source" {
 		optWidth, _ := strconv.Atoi(opt.Width)
