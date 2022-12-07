@@ -355,7 +355,7 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	args = append(args, []string{"-c:d", "copy"}...)
 	
 	// Change Resize Option by Video Format
-	if opt.Format == "auto" && options.Video.Size != "source" {
+	if opt.Format == "auto" && opt.Video.Size != "source" {
 		optWidth, _ := strconv.Atoi(opt.Width)
 			
 		scaleX := float64(optWidth) / float64(videoStreamData.Width)
