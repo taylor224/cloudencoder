@@ -358,13 +358,6 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 	args = append(args, []string{"-map_metadata", "0"}...)
 	args = append(args, []string{"-c:d", "copy"}...)
 	
-	for _, side := range videoStreamData.SideDataList {
-		if side.Rotation != 0 {
-			args = append(args, []string{"-metadata:s:v", "rotate=\"" + strconv.Itoa(side.Rotation) + "\""}...)
-			break
-		}
-	}
-	
 	// Change Resize Option by Video Format
 	if opt.Format == "auto" && opt.Size != "source" {
 		optWidth, _ := strconv.Atoi(opt.Width)
@@ -498,6 +491,21 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 	if vopt.Scaling != "" && vopt.Scaling != "auto" {
 		arg := "flags=" + vopt.Scaling
 		scaleFilters = append(scaleFilters, arg)
+	}
+	
+	for _, side := range videoStreamData.SideDataList {
+		if side.Rotation != 0 {
+			stringTranspose := "1"
+			if side.Rotation == -90 {
+				stringTranspose = "2"	
+			} else if side.Rotation == 90 {
+				stringTranspose = "1"
+			} else if side.Rotation == 180 {
+				stringTranspose = "1,transpose=1"
+			}
+			args = append(args, []string{"transpose=" + stringTranspose}...)
+			break
+		}
 	}
 
 	// Add scale filters to vf flags if provided.
