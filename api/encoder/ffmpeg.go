@@ -492,21 +492,6 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 		arg := "flags=" + vopt.Scaling
 		scaleFilters = append(scaleFilters, arg)
 	}
-	
-	for _, side := range videoStreamData.SideDataList {
-		if side.Rotation != 0 {
-			stringTranspose := "1"
-			if side.Rotation == -90 {
-				stringTranspose = "2"	
-			} else if side.Rotation == 90 {
-				stringTranspose = "1"
-			} else if side.Rotation == 180 {
-				stringTranspose = "1,transpose=1"
-			}
-			args = append(args, []string{"transpose=" + stringTranspose}...)
-			break
-		}
-	}
 
 	// Add scale filters to vf flags if provided.
 	if len(scaleFilters) > 0 {
@@ -585,6 +570,21 @@ func setVideoFilters(vopt videoOptions, opt filterOptions, videoStreamData strea
 	if len(eq) > 0 {
 		eqStr := strings.Join(eq, ":")
 		args = append(args, []string{"eq=" + eqStr}...)
+	}
+	
+	for _, side := range videoStreamData.SideDataList {
+		if side.Rotation != 0 {
+			stringTranspose := "1"
+			if side.Rotation == -90 {
+				stringTranspose = "2"	
+			} else if side.Rotation == 90 {
+				stringTranspose = "1"
+			} else if side.Rotation == 180 {
+				stringTranspose = "1,transpose=1"
+			}
+			args = append(args, []string{"hwdownload,transpose=" + stringTranspose}...)
+			break
+		}
 	}
 
 	argsStr := strings.Join(args, ",")
