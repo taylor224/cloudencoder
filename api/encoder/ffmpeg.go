@@ -365,8 +365,6 @@ func setVideoFlags(opt videoOptions, videoStreamData stream, disableHWAccel bool
 		}
 	}
 	
-	if stream.
-	
 	// Change Resize Option by Video Format
 	if opt.Format == "auto" && opt.Size != "source" {
 		optWidth, _ := strconv.Atoi(opt.Width)
