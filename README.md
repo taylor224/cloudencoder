@@ -23,6 +23,19 @@
     </p>
 </div>
 
+## 설정방법
+<p>아래의 설치방법 대로 설치하신 뒤 encoding 가능한 user 계정을 만들어서 아래의 스크립트에 넣어주고, preset 을 설정해주셔야 합니다.</p>
+<p>openenconder/web 폴더에서 npm run serve 를 실행하셔서 임시 웹서버를 띄워주셔야 편하게 설정이 가능합니다.</p>
+<p>preset_mastodon_h264_encode.json 을 수정하셔서 넣으시면 됩니다.</p>
+<p>Output file name 은 mastodon_h264_encode.mp4 으로 해주셔야 합니다. 변경하고 싶다면 스크립트 변경이 필요합니다.</p>
+<p>그리고 Setting page 에서 Storage Driver 를 Local로 변경하고 Local Path 를 /usr/share/nginx/html/results 로 변경합니다.</p>
+<p>Nginx 설치가 필요합니다. Nginx home path 가 /usr/share/nginx/html 이여야 합니다.</p>
+<p>인코딩을 요청하는 서버에서 인코딩 서버의 API서버와 Nginx 에 접근이 가능해야 합니다.</p>
+<p></p>
+<p>인코딩 서버에서 NVidia CUDA 를 지원하지 않으면 관련 프리셋 값들을 변경해주셔야 합니다.</p>
+
+
+
 ## cloud_encoder.py 사용방법
 <p>OpenEncoder 를 ffmpeg binary 처럼 사용 가능하게 해주는 Python Script</p>
 <p>본 스크립트는 인코딩을 요청하는 웹서버 등에서 사용하는 스크립트 입니다.</p>
