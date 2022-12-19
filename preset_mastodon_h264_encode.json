@@ -1,0 +1,48 @@
+{
+  "format": {
+    "container": "mp4",
+    "clip": false
+  },
+  "video": {
+    "codec": "h264_nvenc",
+    "preset": "none",
+    "pass": "1",
+    "crf": 23,
+    "bitrate": "",
+    "maxrate": "9M",
+    "pixel_format": "yuv420p",
+    "frame_rate": "auto",
+    "speed": "auto",
+    "tune": "none",
+    "profile": "main",
+    "level": "none",
+    "faststart": true,
+    "size": "1920",
+    "width": "1920",
+    "height": "1080",
+    "format": "auto",
+    "aspect": "auto",
+    "scaling": "auto",
+    "codec_options": ""
+  },
+  "audio": {
+    "codec": "copy",
+    "channel": "source",
+    "quality": "192k",
+    "sampleRate": "44100",
+    "volume": "100"
+  },
+  "filter": {
+    "deband": false,
+    "deshake": false,
+    "deflicker": false,
+    "dejudder": false,
+    "denoise": "none",
+    "deinterlace": "none",
+    "brightness": "0",
+    "contrast": "1",
+    "saturation": "0",
+    "gamma": "0",
+    "acontrast": "33"
+  }
+}
