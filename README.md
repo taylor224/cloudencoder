@@ -23,6 +23,14 @@
     </p>
 </div>
 
+## cloud_encoder.py 사용방법
+<p>OpenEncoder 를 ffmpeg binary 처럼 사용 가능하게 해주는 Python Script</p>
+<p>본 스크립트는 인코딩을 요청하는 웹서버 등에서 사용하는 스크립트 입니다.</p>
+<p>사전에 상단의 설정 값들을 변경해주시기 바랍니다.</p>
+<p>alias ffmpeg = "python3 cloud_encoder.py"</p>
+<p>하셔서 사용하시면 됩니다.</p>
+<p>단 parameter 는 input 파일 path와 output 파일 path만 받아서 OpenEncoder 에서 미리 처리된 방식으로 인코딩 하니 주의하시기 바랍니다.</p>
+<p>⚠️ 현재 인코딩 된 파일을 다운로드 하는 부분이 단일 워커에서만 사용 가능하도록 구현되어 있습니다. 차후 여러 워커에서 사용할수 있도록 여러 워커에서 파일을 체크해서 파일이 있는 워커에서 다운받을수 있도록 구현할 예정입니다.</p>
 
 ## Features
 * HTTP API for submitting jobs to a redis-backed FFmpeg worker
