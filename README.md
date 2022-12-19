@@ -1,11 +1,9 @@
 <div align="center">
-    <h1><code>openencoder</code></h1>
+    <h1><code>OpenEncoder</code></h1>
     <p><strong>Open Source Cloud Encoder for FFmpeg</strong></p>
-    <p>A distributed and scalable video encoding pipeline to be used
-    as an API or web interface using your own hosted or cloud infrastructure
-    and FFmpeg encoding presets.
+    <p>NVidia CUDA GPU 를 사용할수 있도록 개조된 OpenEncoder 입니다.
     </p>
-    <p>⚠️ Currently functional, but a work-in-progress! Check back for updates!</p>
+    <p>⚠️ NVidia CUDA 를 사용하지 않는 경우 의도한 대로 작동이 되지 않을수 있습니다.</p>
     <p>
         <a href="https://travis-ci.org/alfg/openencoder">
           <img src="https://travis-ci.org/alfg/openencoder.svg?branch=master" alt="Build Status" />
@@ -28,7 +26,7 @@
 
 ## Features
 * HTTP API for submitting jobs to a redis-backed FFmpeg worker
-* FTP and S3 storage (AWS, Digital Ocean Spaces and Custom S3 Providers supported)
+* Local save and FTP and S3 storage (AWS, Digital Ocean Spaces and Custom S3 Providers supported)
 * Web Dashboard UI for managing encode jobs, workers, users and settings
 * Machines UI/API for scaling cloud worker instances in a VPC
 * Database stored FFmpeg encoding presets
